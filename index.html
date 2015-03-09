@@ -2,7 +2,7 @@
 
 <html lang="en">
 <head>
-<title>Web VR boilerplate (Cardboard and Oculus)</title>
+<title>Threads!</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 <style>
@@ -45,6 +45,12 @@ body {
   -->
 <script src="js/webvr-manager.js"></script>
 
+<!-- 
+  Threads library
+  --> 
+
+<script src="js/threads.js"></script>
+
 <script>
 //Setup three.js WebGL renderer
 var renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -69,20 +75,31 @@ effect.setSize(window.innerWidth, window.innerHeight);
 var vrmgr = new WebVRManager(effect);
 
 // Create 3d objects
-var geometry = new THREE.BoxGeometry(10, 10, 10);
-var material = new THREE.MeshNormalMaterial();
-var cube = new THREE.Mesh(geometry, material);
+// var geometry = new THREE.BoxGeometry(10, 10, 10);
+var material = new THREE.LineBasicMaterial({
+  color: 0x006699
+  linewidth: 100
+
+});
+var geometry = new THREE.Geometry();
+geometry.vertices.push(new THREE.Vector3(-10,0,0));
+geometry.vertices.push(new THREE.Vector3(0, 10,0));
+geometry.vertices.push(new THREE.Vector3(10, 0,0));
+// var cube = new THREE.Mesh(geometry, material);
+var line = new THREE.Line(geometry, material);
 
 // Position cube mesh
-cube.position.z = -20;
+// cube.position.z = -20;
 
 // Add cube mesh to your three.js scene
-scene.add(cube);
+// scene.add(cube);
+scene.add(line);
 
 // Request animation frame loop function
 function animate() {
   // Apply rotation to cube mesh
-  cube.rotation.y += 0.01;
+  // cube.rotation.y += 0.01;
+  line.rotation.y += 0.01;
 
   // Update VR headset position and apply to camera.
   controls.update();
