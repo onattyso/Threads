@@ -83,6 +83,130 @@ line.rotation.x = -50*Math.PI/180;
 // Add mesh to your three.js scene
 scene.add(line);
 
+
+//============
+// triangle test
+
+var tri_geo = new THREE.Geometry();
+// var normal = new THREE.Vector3( 0, 1, 0 );
+// var color = new THREE.Color( 0xffaa00 );
+// var face = new THREE.Face3( 0, 1, 2, normal, color, 0 );
+
+var v1 = new THREE.Vector3(0,0,0);
+var v2 = new THREE.Vector3(5,0,0);
+var v3 = new THREE.Vector3(0,5,0);
+
+tri_geo.vertices.push(v1);
+tri_geo.vertices.push(v2);
+tri_geo.vertices.push(v3);
+
+tri_geo.faces.push( new THREE.Face3( 0, 1, 2 ) );
+tri_geo.computeFaceNormals();
+
+// tri_geo.computeBoundingSphere();
+var redMat = new THREE.MeshBasicMaterial({color: 0xff0000});
+var triMat = new THREE.MeshNormalMaterial();
+var triangle = new THREE.Mesh(tri_geo, redMat);
+
+triangle.position.z = -20;
+triangle.position.y = 10;
+
+// And we should be good to go on adding it to the scene in the correct location:
+scene.add(triangle);
+
+// triangle test
+//============
+
+
+
+
+
+
+
+
+//============
+// Cube object:
+
+// Create 3d objects
+var geometry = new THREE.BoxGeometry(10, 10, 10);
+var material = new THREE.MeshNormalMaterial();
+var cube = new THREE.Mesh(geometry, material);
+
+// Position cube mesh:
+// This time, we'll use a Vector3 to position the object.
+// So, instead of these two lines:
+// cube.position.z = -20;
+
+// We'll use a Vector3
+var cube_start_pos = new THREE.Vector3( 0, 0, -20 ); // x, y, z
+
+var quaternion = new THREE.Quaternion();
+quaternion.setFromAxisAngle( new THREE.Vector3( 0, 0, 1 ), 45*Math.PI / 180 );
+
+// And set the objects position directly using that vector:
+// cube.position = cube_start_pos;
+
+console.log("What: " + cube.position.z);
+
+// cube.position.setZ(cube_start_pos.z); // works but is too tedius to use
+// cube.position.set(cube_start_pos); // z is undefined
+cube.position = cube_start_pos; // Doesn't work, leaves z at zero.
+cube.quaternion = quaternion;
+cube.updateMatrix();
+cube.matrixAutoUpdate = true;
+// cube.matrixAutoUpdate = false;
+
+console.log("The fuck: " + cube.position.z);
+console.log("Type: " + cube.type);
+// Then we need to update the objects matrix...
+// cube.updateMatrix();
+// cube.updateMatrixWorld();
+// cube.matrixWorldNeedsUpdate = true;
+
+// Add cube mesh to your three.js scene
+scene.add(cube);
+
+// Cube object
+//============
+
+
+
+
+
+
+
+
+
+
+//============
+// Text object
+var textParams = {
+  size: 1,
+  height: 1,
+  font: 'helvetiker'
+};
+
+var textMesh = new THREE.TextGeometry( "Console..........:!@#42350\/", textParams);
+// var textMaterial = new THREE.MeshBasicMaterial({color: 0xFF5555});
+var textMaterial = new THREE.MeshNormalMaterial();
+var textObj = new THREE.Mesh(textMesh, textMaterial);
+
+textObj.position.z = -20;
+textMesh.computeBoundingBox();
+console.log("Size max x: " + textMesh.boundingBox.max.x);
+console.log("Size min x: " + textMesh.boundingBox.min.x);
+textObj.position.x = -textMesh.boundingBox.max.x/2;
+textObj.position.y = 10;
+textObj.rotation.x = 30*Math.PI/180;
+
+// Add text to the scene
+scene.add(textObj);
+
+// Text object
+//============
+
+
+
 // Request animation frame loop function
 function animate() {
   // Apply rotation to cube mesh
