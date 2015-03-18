@@ -2,8 +2,41 @@
 
 var THREADS = (function() {
   return {
+    aBunchOfCubes: [],
     init: function() {
       console.log("Initializing Threads!");
+
+      console.log("Creating some cubes...");
+      this.createCube();
+      this.createCube();
+      this.createCube();
+
+      console.log("Listing all of the cubes we just made...");
+      this.listCubes();
+    },
+    createCube: function() {
+      console.log("Making a 3D cube!");
+      // Build a cube here...
+      var cube_geometry;// = Some geometry here;
+      var cube_material;// = Some material here;
+      // And then save it to the aBunchOfCubes array:
+      //this.aBunchOfCubes.push(new THREE.Mesh(cube_geometry, cube_material));
+
+      // Comment this out to STOP adding FAKE cubes to the list:
+      this.aBunchOfCubes.push("NOT A CUBE! Go write some code!");
+    },
+    listCubes: function() {
+      var cubeCount = this.aBunchOfCubes.length;
+      if (cubeCount == 0) {
+        console.log("No cubes found!");
+      } else {
+        console.log(cubeCount + " cubes found!");
+        for (var i = 0; i < cubeCount; i++) {
+          console.log("Cube " + i + ":");
+          console.dir(this.aBunchOfCubes[i]);
+        }
+      }
+
     }
   };
 })();
