@@ -1,5 +1,49 @@
 //code from index.html
 
+//Setup three.js WebGL renderer
+var renderer = new THREE.WebGLRenderer({ antialias: true });
+
+// Append the canvas element created by the renderer to document body element.
+document.body.appendChild(renderer.domElement);
+
+// Create a three.js scene. Fog so the lines disappear in the distance.
+var scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x000000, 0.0016);
+
+// Create a three.js camera
+var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
+
+//lights!
+var light = new THREE.DirectionalLight( 0xffffff, 1 );
+light.position.set( 1, 1, 1 ).normalize();
+scene.add( light );
+
+var amblight = new THREE.AmbientLight( 0x505050 ); // soft white light
+amblight.position.set( 1, 1, 1 ).normalize();
+scene.add( amblight );
+
+// Apply VR headset positional data to camera.
+var controls = new THREE.VRControls(camera);
+
+// Apply VR stereo rendering to renderer
+var effect = new THREE.VREffect(renderer);
+effect.setSize(window.innerWidth, window.innerHeight);
+
+// Create a VR manager helper to enter and exit VR mode.
+var vrmgr = new WebVRManager(effect);
+
+// Create 3d objects
+var geometry = new THREE.PlaneBufferGeometry( -20, -10, 10, 10);
+var material = new THREE.MeshBasicMaterial( {color: 0xff0000, side: THREE.DoubleSide} );
+var line = new THREE.Mesh(geometry, material);
+line.position.x = 0;
+line.position.y = 0;
+line.position.z = -20;
+line.rotation.x = -50*Math.PI/180;
+
+// Add mesh to your three.js scene
+scene.add(line);
+
 var THREADS = (function() {
   return {
     aBunchOfCubes: [],
@@ -18,23 +62,32 @@ var THREADS = (function() {
     createCube: function() {
       console.log("Making a 3D cube!");
       // Build a cube here...
-      var geometry = new THREE.BoxGeometry(10,10,10);// = Some geometry here;
-      var material = new THREE.MeshBasicMaterial({color: Math.random() * 0xffffff});// = Some material here;
+      var geometry = new THREE.BoxGeometry(10,10,10);
+      var material = new THREE.MeshBasicMaterial({color: Math.random() * 0xffffff});
       
-      for ( var i = 0; i < 2000; i ++ ) {
+      for ( var i = 0; i < 1500; i ++ ) {
 
 	      var cube = new THREE.Mesh(geometry, material);
-	      		cube.position.x = Math.random() * 800 - 400;
-				cube.position.y = Math.random() * 800 - 400;
-				cube.position.z = Math.random() * 800 - 400;
+	      	cube.position.x = Math.random() * 10;
+			cube.position.y = Math.random() * 10;
+			cube.position.z = Math.random() * 10;
 
-				cube.rotation.x = Math.random() * 2 * Math.PI;
-				cube.rotation.y = Math.random() * 2 * Math.PI;
-				cube.rotation.z = Math.random() * 2 * Math.PI;
+			cube.rotation.x = Math.random() * Math.PI;
+			cube.rotation.y = Math.random() * Math.PI;
+			cube.rotation.z = Math.random() * Math.PI;
 
-				cube.scale.x = Math.random() + 0.5;
-				cube.scale.y = Math.random() + 0.5;
-				cube.scale.z = Math.random() + 0.5;
+	  //     var cube = new THREE.Mesh(geometry, material);
+	  //     	cube.position.x = Math.random() * 800 - 400;
+			// cube.position.y = Math.random() * 800 - 400;
+			// cube.position.z = Math.random() * 800 - 400;
+
+			// cube.rotation.x = Math.random() * 2 * Math.PI;
+			// cube.rotation.y = Math.random() * 2 * Math.PI;
+			// cube.rotation.z = Math.random() * 2 * Math.PI;
+
+			// cube.scale.x = Math.random() + 0.5;
+			// cube.scale.y = Math.random() + 0.5;
+			cube.scale.z = Math.random() + 1;
 
 	      scene.add(cube);
 	  }
@@ -63,50 +116,6 @@ var THREADS = (function() {
 
 
 
-
-
-
-
-
-//Setup three.js WebGL renderer
-var renderer = new THREE.WebGLRenderer({ antialias: true });
-
-// Append the canvas element created by the renderer to document body element.
-document.body.appendChild(renderer.domElement);
-
-// Create a three.js scene. Fog so the lines disappear in the distance.
-var scene = new THREE.Scene();
-scene.fog = new THREE.FogExp2(0x000000, 0.0016);
-
-//lights!
-var light = new THREE.DirectionalLight( 0xffffff, 1 );
-light.position.set( 1, 1, 1 ).normalize();
-scene.add( light );
-
-// Create a three.js camera
-var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
-
-// Apply VR headset positional data to camera.
-var controls = new THREE.VRControls(camera);
-
-// Apply VR stereo rendering to renderer
-var effect = new THREE.VREffect(renderer);
-effect.setSize(window.innerWidth, window.innerHeight);
-
-// Create a VR manager helper to enter and exit VR mode.
-var vrmgr = new WebVRManager(effect);
-
-// Create 3d objects
-var geometry = new THREE.PlaneBufferGeometry( -20, -10, 10, 10);
-var material = new THREE.MeshBasicMaterial( {color: 0xff0000, side: THREE.DoubleSide} );
-var line = new THREE.Mesh(geometry, material);
-line.position.x = 0;
-line.position.y = 0;
-line.position.z = -20;
-line.rotation.x = -50*Math.PI/180;
-
-// Add mesh to your three.js scene
-scene.add(line);
 
 // Request animation frame loop function
 function animate() {
