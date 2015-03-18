@@ -1,4 +1,20 @@
 //code from index.html
+
+var THREADS = (function() {
+  return {
+    init: function() {
+      console.log("Initializing Threads!");
+    }
+  };
+})();
+
+
+
+
+
+
+
+
 //Setup three.js WebGL renderer
 var renderer = new THREE.WebGLRenderer({ antialias: true });
 
@@ -79,7 +95,7 @@ function onKey(event) {
     line.position.z = line.position.z + 1;
   }
 
-};
+}
 
 window.addEventListener('keydown', onKey, true);
 
@@ -93,6 +109,14 @@ function onWindowResize() {
 }
 
 window.addEventListener('resize', onWindowResize, false);
+
+
+
+$(document).ready(function() {
+  THREADS.init();
+});
+
+
 
 
 //Our animation

@@ -1,3 +1,34 @@
+# Threads
+
+Just moving stuff down so we can document some more...
+
+three.js 3d library
+<script src="js/three.min.js"></script>
+
+VRControls.js acquires positional information from connected VR devices and applies the transformations to a three.js camera object.
+<script src="js/VRControls.js"></script>
+
+VREffect.js handles stereo camera setup and rendering.
+<script src="js/VREffect.js"></script>
+
+A polyfill for WebVR using the Device{Motion,Orientation}Event API.
+<script src="js/webvr-polyfill.js"></script>
+
+Helps enter and exit VR mode, provides best practices while in VR.
+<script src="js/webvr-manager.js"></script>
+
+
+
+Threads App itself:
+<script src="js/threads.js"></script>
+
+
+
+
+
+
+
+
 # WebVR Boilerplate
 
 A starting point for web-based VR experiences that work well in both
