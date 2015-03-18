@@ -13,14 +13,34 @@ var THREADS = (function() {
 
       console.log("Listing all of the cubes we just made...");
       this.listCubes();
+      //write a function that draws to the screen
     },
     createCube: function() {
       console.log("Making a 3D cube!");
       // Build a cube here...
-      var cube_geometry;// = Some geometry here;
-      var cube_material;// = Some material here;
+      var geometry = new THREE.BoxGeometry(10,10,10);// = Some geometry here;
+      var material = new THREE.MeshBasicMaterial({color: Math.random() * 0xffffff});// = Some material here;
+      
+      for ( var i = 0; i < 2000; i ++ ) {
+
+	      var cube = new THREE.Mesh(geometry, material);
+	      		cube.position.x = Math.random() * 800 - 400;
+				cube.position.y = Math.random() * 800 - 400;
+				cube.position.z = Math.random() * 800 - 400;
+
+				cube.rotation.x = Math.random() * 2 * Math.PI;
+				cube.rotation.y = Math.random() * 2 * Math.PI;
+				cube.rotation.z = Math.random() * 2 * Math.PI;
+
+				cube.scale.x = Math.random() + 0.5;
+				cube.scale.y = Math.random() + 0.5;
+				cube.scale.z = Math.random() + 0.5;
+
+	      scene.add(cube);
+	  }
+
       // And then save it to the aBunchOfCubes array:
-      //this.aBunchOfCubes.push(new THREE.Mesh(cube_geometry, cube_material));
+      this.aBunchOfCubes.push(cube);
 
       // Comment this out to STOP adding FAKE cubes to the list:
       this.aBunchOfCubes.push("NOT A CUBE! Go write some code!");
@@ -58,6 +78,11 @@ document.body.appendChild(renderer.domElement);
 var scene = new THREE.Scene();
 scene.fog = new THREE.FogExp2(0x000000, 0.0016);
 
+//lights!
+var light = new THREE.DirectionalLight( 0xffffff, 1 );
+light.position.set( 1, 1, 1 ).normalize();
+scene.add( light );
+
 // Create a three.js camera
 var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
 
@@ -85,10 +110,6 @@ scene.add(line);
 
 // Request animation frame loop function
 function animate() {
-  // Apply rotation to cube mesh
-  // cube.rotation.y += 0.01;
-
-  // line.rotation.y += 0.01;
 
   // Update VR headset position and apply to camera.
   controls.update();
