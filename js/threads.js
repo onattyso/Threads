@@ -21,7 +21,7 @@ var THREADS = (function() {
       var geometry = new THREE.BoxGeometry(15,15,15);// = Some geometry here;
       var material = new THREE.MeshPhongMaterial({color: Math.random() * 0xffffff});// = Some material here;
       
-      for ( var i = 0; i < 600; i++ ) {
+      for ( i = 0; i < 600; i++ ) {
 
 	      var cube = new THREE.Mesh(geometry, material);
 	      		cube.position.x = Math.random() * 800 - 400;
@@ -31,10 +31,6 @@ var THREADS = (function() {
 				cube.rotation.x = Math.random() * 2 * Math.PI;
 				cube.rotation.y = Math.random() * 2 * Math.PI;
 				cube.rotation.z = Math.random() * 2 * Math.PI;
-
-				cube.scale.x = Math.random() + 0.5;
-				cube.scale.y = Math.random() + 0.5;
-				cube.scale.z = Math.random() + 0.5;
 
 	      scene.add(cube);
 	  }
