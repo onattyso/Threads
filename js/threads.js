@@ -18,10 +18,10 @@ var THREADS = (function() {
     createCube: function() {
       console.log("Making a 3D cube!");
       // Build a cube here...
-      var geometry = new THREE.BoxGeometry(10,10,10);// = Some geometry here;
-      var material = new THREE.MeshBasicMaterial({color: Math.random() * 0xffffff});// = Some material here;
+      var geometry = new THREE.BoxGeometry(15,15,15);// = Some geometry here;
+      var material = new THREE.MeshPhongMaterial({color: Math.random() * 0xffffff});// = Some material here;
       
-      for ( var i = 0; i < 2000; i ++ ) {
+      for ( var i = 0; i < 600; i++ ) {
 
 	      var cube = new THREE.Mesh(geometry, material);
 	      		cube.position.x = Math.random() * 800 - 400;
@@ -83,6 +83,9 @@ var light = new THREE.DirectionalLight( 0xffffff, 1 );
 light.position.set( 1, 1, 1 ).normalize();
 scene.add( light );
 
+var amblight = new  THREE.AmbientLight (0x333333);
+scene.add(amblight);
+
 // Create a three.js camera
 var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
 
@@ -98,7 +101,7 @@ var vrmgr = new WebVRManager(effect);
 
 // Create 3d objects
 var geometry = new THREE.PlaneBufferGeometry( -20, -10, 10, 10);
-var material = new THREE.MeshBasicMaterial( {color: 0xff0000, side: THREE.DoubleSide} );
+var material = new THREE.MeshPhongMaterial( {color: 0xff0000, side: THREE.DoubleSide} );
 var line = new THREE.Mesh(geometry, material);
 line.position.x = 0;
 line.position.y = 0;
