@@ -20,8 +20,6 @@ var THREADS = (function () {
 
       console.log("Listing all of the cubes we just made...");
       this.listCubes();
-      //write a function that draws to the screen
-
       this.createLine();
     },
     createCube: function () {
@@ -45,7 +43,6 @@ var THREADS = (function () {
     listCubes: function () {
       var cubeCount = this.aBunchOfCubes.length;
       if (cubeCount > 0) {
-        console.log(cubeCount + " cubes found!");
         for (var i = 0; i < cubeCount; i++) {
           console.log("Cube " + i + ":");
           console.dir(this.aBunchOfCubes[i]);
@@ -59,7 +56,6 @@ var THREADS = (function () {
     listLines: function () {
       var lineCount = this.allObjects.length;
       if (lineCount > 0) {
-        console.log(lineCount + " lines found!");
         for (var i = 0; i < lineCount; i++) {
           console.log("line " + i + ":");
           console.dir(this.allObjects[i]);
@@ -73,12 +69,19 @@ var THREADS = (function () {
     updateAll: function() {
       var count = this.allObjects.length;
       if (count > 0) {
-        console.log(count + " lines found!");
-        for (var i = 0; i < lineCount; i++) {
+        for (var i = 0; i < count; i++) {
           this.allObjects[i].update();
         }
       } else {
         console.log("No objects found!");
+      }
+      var cubecount = this.aBunchOfCubes.length;
+      if (cubecount > 0) {
+        for (var i = 0; i < cubecount; i++) {
+          this.aBunchOfCubes[i].update();
+        }
+      } else {
+        console.log("No cubes found!");
       }
     }
   };
@@ -99,14 +102,9 @@ OurVRCube.prototype = {
   init: function () {
     console.log("Making a 3D cube!");
     // Build a cube here...
-    this.geometry = new THREE.BoxGeometry(15, 15, 15);// = Some geometry here;
-
+    this.geometry = new THREE.BoxGeometry(15, 15, 15);
     this.material = new THREE.MeshPhongMaterial({color: Math.random() * 0xffffff});
-
     this.cube = new THREE.Mesh(this.geometry, this.material);
-
-    //var cube = new THREE.Mesh(geometry, (new THREE.MeshPhongMaterial({color: Math.random() * 0xffffff})));
-    //this.cube.material = new THREE.MeshPhongMaterial({color: Math.random() * 0xffffff});
 
     this.cube.position.x = Math.random() * 800 - 400;
     this.cube.position.y = Math.random() * 800 - 400;
@@ -117,7 +115,7 @@ OurVRCube.prototype = {
     this.cube.rotation.z = Math.random() * 2 * Math.PI;
   },
   update: function() {
-    
+    this.cube.rotation.x += 2*Math.PI/180;
   },
   draw: function () {
 //   actually draws shit ONLY FOR THIS ONE INSTANCE OF ANY GIVEN LINE.
@@ -146,14 +144,13 @@ OurVRLine.prototype = {
 	
   },
   update: function() {
+  	this.line.rotation.x += 1*Math.PI/180;
     
   },
   draw: function () {
 //   actually draws shit ONLY FOR THIS ONE INSTANCE OF ANY GIVEN LINE.
   }
 };
-
-
 
 
 //=====================
@@ -197,6 +194,8 @@ function animate() {
 
   // Update VR headset position and apply to camera.
   controls.update();
+
+  THREADS.updateAll();
 
   // Render the scene through the VREffect, but only if it's in VR mode.
   if (vrmgr.isVRMode()) {
