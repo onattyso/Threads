@@ -47,6 +47,8 @@ scene.add(line);
 var THREADS = (function() {
   return {
     aBunchOfCubes: [],
+    allObjects: [],
+    
     init: function() {
       console.log("Initializing Threads!");
 
@@ -168,3 +170,45 @@ $(document).ready(function() {
 
 
 
+
+
+
+
+
+function OurVRCube() {
+  Console.log("Initalizing the user input handler...");
+  this.init();
+  Console.log("User Input initialized!")
+}
+OurVRCube.prototype = {
+  this.x = 0,
+  this.y = 0,
+  this.z = 0,
+  this.cube = null,
+  init: function() {
+
+  },
+  draw: function() {
+//   actually draws shit ONLY FOR THIS ONE INSTANCE OF ANY GIVEN LINE.
+  }
+};
+
+
+
+function OurVRLine() {
+  Console.log("Initalizing the user input handler...");
+  this.init();
+  Console.log("User Input initialized!")
+}
+OurVRLine.prototype = {
+  this.x = 0,
+  this.y = 0,
+  this.z = 0,
+  this.line = null,
+  init: function() {
+
+  },
+  draw: function() {
+//   actually draws shit ONLY FOR THIS ONE INSTANCE OF ANY GIVEN LINE.
+  }
+};
