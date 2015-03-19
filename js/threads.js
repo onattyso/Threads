@@ -52,26 +52,12 @@ var THREADS = (function() {
 
       console.log("Creating some cubes...");
 
-      var geometry = new THREE.BoxGeometry(15,15,15);// = Some geometry here;
-      var material = new THREE.MeshPhongMaterial({color: Math.random() * 0xffffff});
-	  var cube = new THREE.Mesh(geometry, material);
-
       for ( i = 0; i < 600; i++ ) {
 
-      			cube.material = new THREE.MeshPhongMaterial({color: Math.random() * 0xffffff});
-	      // var cube = new THREE.Mesh(geometry, (new THREE.MeshPhongMaterial({color: Math.random() * 0xffffff})));
-	      		cube.position.x = Math.random() * 800 - 400;
-				cube.position.y = Math.random() * 800 - 400;
-				cube.position.z = Math.random() * 800 - 400;
+      	this.createCube();
 
-				cube.rotation.x = Math.random() * 2 * Math.PI;
-				cube.rotation.y = Math.random() * 2 * Math.PI;
-				cube.rotation.z = Math.random() * 2 * Math.PI;
-
-	      scene.add(cube);
 	  }
 
-      this.createCube();
 
       console.log("Listing all of the cubes we just made...");
       this.listCubes();
@@ -80,7 +66,21 @@ var THREADS = (function() {
     createCube: function() {
       console.log("Making a 3D cube!");
       // Build a cube here...
-      
+      var geometry = new THREE.BoxGeometry(15,15,15);// = Some geometry here;
+      var material = new THREE.MeshPhongMaterial({color: Math.random() * 0xffffff});
+	  var cube = new THREE.Mesh(geometry, material);
+
+      	cube.material = new THREE.MeshPhongMaterial({color: Math.random() * 0xffffff});
+	      // var cube = new THREE.Mesh(geometry, (new THREE.MeshPhongMaterial({color: Math.random() * 0xffffff})));
+	    cube.position.x = Math.random() * 800 - 400;
+		cube.position.y = Math.random() * 800 - 400;
+		cube.position.z = Math.random() * 800 - 400;
+
+		cube.rotation.x = Math.random() * 2 * Math.PI;
+		cube.rotation.y = Math.random() * 2 * Math.PI;
+		cube.rotation.z = Math.random() * 2 * Math.PI;      
+
+	  scene.add(cube);
       // And then save it to the aBunchOfCubes array:
       this.aBunchOfCubes.push(cube);
 
