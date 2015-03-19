@@ -18,10 +18,11 @@ var THREADS = (function () {
         this.createCube();
       }
 
-
       console.log("Listing all of the cubes we just made...");
       this.listCubes();
       //write a function that draws to the screen
+
+      createLine();
     },
     createCube: function () {
       var aCube = new OurVRCube();
@@ -33,6 +34,14 @@ var THREADS = (function () {
       scene.add(aCube.cube);
 
     },
+    createLine: function () {
+      var aLine = new OurVRLine();
+
+      this.allObjects.push(aLine);
+      scene.add(aLine.line);
+
+    },
+
     listCubes: function () {
       var cubeCount = this.aBunchOfCubes.length;
       if (cubeCount == 0) {
@@ -42,6 +51,20 @@ var THREADS = (function () {
         for (var i = 0; i < cubeCount; i++) {
           console.log("Cube " + i + ":");
           console.dir(this.aBunchOfCubes[i]);
+        }
+      }
+
+    },
+
+    listLines: function () {
+      var lineCount = this.allObjects.length;
+      if (lineCount == 0) {
+        console.log("No lines found!");
+      } else {
+        console.log(lineCount + " lines found!");
+        for (var i = 0; i < lineCount; i++) {
+          console.log("line " + i + ":");
+          console.dir(this.allObjects[i]);
         }
       }
 
@@ -98,6 +121,14 @@ OurVRLine.prototype = {
   line: null,
   init: function () {
 
+	this.geometry = new THREE.PlaneBufferGeometry(-20, -10, 10, 10);
+	this.material = new THREE.MeshPhongMaterial({color: 0xff0000, side: THREE.DoubleSide});
+	this.line = new THREE.Mesh(geometry, material);
+	this.line.position.x = 0;
+	line.position.y = 0;
+	line.position.z = -20;
+	line.rotation.x = -50 * Math.PI / 180;
+	
   },
   draw: function () {
 //   actually draws shit ONLY FOR THIS ONE INSTANCE OF ANY GIVEN LINE.
@@ -140,19 +171,6 @@ effect.setSize(window.innerWidth, window.innerHeight);
 
 // Create a VR manager helper to enter and exit VR mode.
 var vrmgr = new WebVRManager(effect);
-
-// Create 3d objects
-var geometry = new THREE.PlaneBufferGeometry(-20, -10, 10, 10);
-var material = new THREE.MeshPhongMaterial({color: 0xff0000, side: THREE.DoubleSide});
-var line = new THREE.Mesh(geometry, material);
-line.position.x = 0;
-line.position.y = 0;
-line.position.z = -20;
-line.rotation.x = -50 * Math.PI / 180;
-
-// Add mesh to your three.js scene
-scene.add(line);
-
 
 
 
