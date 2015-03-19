@@ -22,7 +22,7 @@ var THREADS = (function () {
       this.listCubes();
       //write a function that draws to the screen
 
-      createLine();
+      this.createLine();
     },
     createCube: function () {
       var aCube = new OurVRCube();
@@ -123,11 +123,11 @@ OurVRLine.prototype = {
 
 	this.geometry = new THREE.PlaneBufferGeometry(-20, -10, 10, 10);
 	this.material = new THREE.MeshPhongMaterial({color: 0xff0000, side: THREE.DoubleSide});
-	this.line = new THREE.Mesh(geometry, material);
+	this.line = new THREE.Mesh(this.geometry, this.material);
 	this.line.position.x = 0;
-	line.position.y = 0;
-	line.position.z = -20;
-	line.rotation.x = -50 * Math.PI / 180;
+	this.line.position.y = 0;
+	this.line.position.z = -20;
+	this.line.rotation.x = -50 * Math.PI / 180;
 	
   },
   draw: function () {
