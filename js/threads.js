@@ -7,23 +7,11 @@ var THREADS = (function() {
       console.log("Initializing Threads!");
 
       console.log("Creating some cubes...");
-      this.createCube();
-      this.createCube();
-      this.createCube();
-
-      console.log("Listing all of the cubes we just made...");
-      this.listCubes();
-      //write a function that draws to the screen
-    },
-    createCube: function() {
-      console.log("Making a 3D cube!");
-      // Build a cube here...
       var geometry = new THREE.BoxGeometry(15,15,15);// = Some geometry here;
-      var material = new THREE.MeshPhongMaterial({color: Math.random() * 0xffffff});// = Some material here;
-      
+
       for ( i = 0; i < 600; i++ ) {
 
-	      var cube = new THREE.Mesh(geometry, material);
+	      var cube = new THREE.Mesh(geometry, (new THREE.MeshPhongMaterial({color: Math.random() * 0xffffff})));
 	      		cube.position.x = Math.random() * 800 - 400;
 				cube.position.y = Math.random() * 800 - 400;
 				cube.position.z = Math.random() * 800 - 400;
@@ -35,6 +23,17 @@ var THREADS = (function() {
 	      scene.add(cube);
 	  }
 
+
+      this.createCube();
+
+      console.log("Listing all of the cubes we just made...");
+      this.listCubes();
+      //write a function that draws to the screen
+    },
+    createCube: function() {
+      console.log("Making a 3D cube!");
+      // Build a cube here...      // var material = new THREE.MeshPhongMaterial({color: Math.random() * 0xffffff});// = Some material here;
+      
       // And then save it to the aBunchOfCubes array:
       this.aBunchOfCubes.push(cube);
 
