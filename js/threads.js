@@ -1,95 +1,39 @@
-//code from index.html
-
-
-//Setup three.js WebGL renderer
-var renderer = new THREE.WebGLRenderer({ antialias: true });
-
-// Append the canvas element created by the renderer to document body element.
-document.body.appendChild(renderer.domElement);
-
-// Create a three.js scene. Fog so the lines disappear in the distance.
-var scene = new THREE.Scene();
-scene.fog = new THREE.FogExp2(0x000000, 0.0016);
-
-//lights!
-var light = new THREE.DirectionalLight( 0xffffff, 1 );
-light.position.set( 1, 1, 1 ).normalize();
-scene.add( light );
-
-var amblight = new  THREE.AmbientLight (0x333333);
-scene.add(amblight);
-
-// Create a three.js camera
-var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
-
-// Apply VR headset positional data to camera.
-var controls = new THREE.VRControls(camera);
-
-// Apply VR stereo rendering to renderer
-var effect = new THREE.VREffect(renderer);
-effect.setSize(window.innerWidth, window.innerHeight);
-
-// Create a VR manager helper to enter and exit VR mode.
-var vrmgr = new WebVRManager(effect);
-
-// Create 3d objects
-var geometry = new THREE.PlaneBufferGeometry( -20, -10, 10, 10);
-var material = new THREE.MeshPhongMaterial( {color: 0xff0000, side: THREE.DoubleSide} );
-var line = new THREE.Mesh(geometry, material);
-line.position.x = 0;
-line.position.y = 0;
-line.position.z = -20;
-line.rotation.x = -50*Math.PI/180;
-
-// Add mesh to your three.js scene
-scene.add(line);
-
-var THREADS = (function() {
+//
+// thread.js
+// 2015/03/14
+//
+// I moved THREADS back up to the top because the rest of the app is not going to stay where it is for very long...
+// It'll all get moved into THREADS in some way or another down the road...
+var THREADS = (function () {
   return {
     aBunchOfCubes: [],
     allObjects: [],
-    
-    init: function() {
+
+    init: function () {
       console.log("Initializing Threads!");
 
       console.log("Creating some cubes...");
 
-      for ( i = 0; i < 600; i++ ) {
-
-      	this.createCube();
-
-	  }
+      for (var i = 0; i < 600; i++) {
+        this.createCube();
+      }
 
 
       console.log("Listing all of the cubes we just made...");
       this.listCubes();
       //write a function that draws to the screen
     },
-    createCube: function() {
-      console.log("Making a 3D cube!");
-      // Build a cube here...
-      var geometry = new THREE.BoxGeometry(15,15,15);// = Some geometry here;
-      var material = new THREE.MeshPhongMaterial({color: Math.random() * 0xffffff});
-	  var cube = new THREE.Mesh(geometry, material);
+    createCube: function () {
+      var aCube = new OurVRCube();
 
-      	cube.material = new THREE.MeshPhongMaterial({color: Math.random() * 0xffffff});
-	      // var cube = new THREE.Mesh(geometry, (new THREE.MeshPhongMaterial({color: Math.random() * 0xffffff})));
-	    cube.position.x = Math.random() * 800 - 400;
-		cube.position.y = Math.random() * 800 - 400;
-		cube.position.z = Math.random() * 800 - 400;
-
-		cube.rotation.x = Math.random() * 2 * Math.PI;
-		cube.rotation.y = Math.random() * 2 * Math.PI;
-		cube.rotation.z = Math.random() * 2 * Math.PI;      
-
-	  scene.add(cube);
       // And then save it to the aBunchOfCubes array:
-      this.aBunchOfCubes.push(cube);
+      this.aBunchOfCubes.push(aCube);
 
-      // Comment this out to STOP adding FAKE cubes to the list:
-      this.aBunchOfCubes.push("NOT A CUBE! Go write some code!");
+      // And add it to the scene (this could be move to a later point in the app...)
+      scene.add(aCube.cube);
+
     },
-    listCubes: function() {
+    listCubes: function () {
       var cubeCount = this.aBunchOfCubes.length;
       if (cubeCount == 0) {
         console.log("No cubes found!");
@@ -106,6 +50,112 @@ var THREADS = (function() {
 })();
 
 
+function OurVRCube() {
+  console.log("Building a new Cube");
+  this.init();
+}
+OurVRCube.prototype = {
+  x: 0,
+  y: 0,
+  z: 0,
+  geometry: 0,
+  material: 0,
+  cube: 0,
+  init: function () {
+    console.log("Making a 3D cube!");
+    // Build a cube here...
+    this.geometry = new THREE.BoxGeometry(15, 15, 15);// = Some geometry here;
+
+    this.material = new THREE.MeshPhongMaterial({color: Math.random() * 0xffffff});
+
+    this.cube = new THREE.Mesh(this.geometry, this.material);
+
+    //var cube = new THREE.Mesh(geometry, (new THREE.MeshPhongMaterial({color: Math.random() * 0xffffff})));
+    //this.cube.material = new THREE.MeshPhongMaterial({color: Math.random() * 0xffffff});
+
+    this.cube.position.x = Math.random() * 800 - 400;
+    this.cube.position.y = Math.random() * 800 - 400;
+    this.cube.position.z = Math.random() * 800 - 400;
+
+    this.cube.rotation.x = Math.random() * 2 * Math.PI;
+    this.cube.rotation.y = Math.random() * 2 * Math.PI;
+    this.cube.rotation.z = Math.random() * 2 * Math.PI;
+  },
+  draw: function () {
+//   actually draws shit ONLY FOR THIS ONE INSTANCE OF ANY GIVEN LINE.
+  }
+};
+
+
+function OurVRLine() {
+  console.log("Building a new line");
+  this.init();
+}
+OurVRLine.prototype = {
+  x: 0,
+  y: 0,
+  z: 0,
+  line: null,
+  init: function () {
+
+  },
+  draw: function () {
+//   actually draws shit ONLY FOR THIS ONE INSTANCE OF ANY GIVEN LINE.
+  }
+};
+
+
+
+
+//=====================
+// Everything after here is going to be moving somewhere else at some point...
+
+//Setup three.js WebGL renderer
+var renderer = new THREE.WebGLRenderer({antialias: true});
+
+// Append the canvas element created by the renderer to document body element.
+document.body.appendChild(renderer.domElement);
+
+// Create a three.js scene. Fog so the lines disappear in the distance.
+var scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x000000, 0.0016);
+
+//lights!
+var light = new THREE.DirectionalLight(0xffffff, 1);
+light.position.set(1, 1, 1).normalize();
+scene.add(light);
+
+var amblight = new THREE.AmbientLight(0x333333);
+scene.add(amblight);
+
+// Create a three.js camera
+var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
+
+// Apply VR headset positional data to camera.
+var controls = new THREE.VRControls(camera);
+
+// Apply VR stereo rendering to renderer
+var effect = new THREE.VREffect(renderer);
+effect.setSize(window.innerWidth, window.innerHeight);
+
+// Create a VR manager helper to enter and exit VR mode.
+var vrmgr = new WebVRManager(effect);
+
+// Create 3d objects
+var geometry = new THREE.PlaneBufferGeometry(-20, -10, 10, 10);
+var material = new THREE.MeshPhongMaterial({color: 0xff0000, side: THREE.DoubleSide});
+var line = new THREE.Mesh(geometry, material);
+line.position.x = 0;
+line.position.y = 0;
+line.position.z = -20;
+line.rotation.x = -50 * Math.PI / 180;
+
+// Add mesh to your three.js scene
+scene.add(line);
+
+
+
+
 // Request animation frame loop function
 function animate() {
 
@@ -119,11 +169,11 @@ function animate() {
     renderer.render(scene, camera);
   }
 
-  requestAnimationFrame( animate );
+  requestAnimationFrame(animate);
 }
-
 // Kick off animation loop
 animate();
+
 
 // Listen for keyboard event and zero positional sensor on appropriate keypress.
 function onKey(event) {
@@ -132,7 +182,6 @@ function onKey(event) {
   }
 
   // Key codes https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode
-
   if (event.keyCode == 74) { // "J"
     line.position.x = line.position.x - 1;
   }
@@ -146,9 +195,7 @@ function onKey(event) {
   if (event.keyCode == 75) { // "K"
     line.position.z = line.position.z + 1;
   }
-
 }
-
 window.addEventListener('keydown', onKey, true);
 
 
@@ -156,59 +203,20 @@ window.addEventListener('keydown', onKey, true);
 function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
-
-  effect.setSize( window.innerWidth, window.innerHeight );
+  effect.setSize(window.innerWidth, window.innerHeight);
 }
-
 window.addEventListener('resize', onWindowResize, false);
 
 
+// Everything above here is going to be moved somewhere else where it can be better managed...
+//=====================
 
-$(document).ready(function() {
+
+
+//=====================
+// As long as this is AFTER all of the other code, we can put the "var THREAD" definition anywhere in this file
+// (assuming it's not in another block...)
+$(document).ready(function () {
   THREADS.init();
 });
 
-
-
-
-
-
-
-
-function OurVRCube() {
-  Console.log("Initalizing the user input handler...");
-  this.init();
-  Console.log("User Input initialized!")
-}
-OurVRCube.prototype = {
-  this.x = 0,
-  this.y = 0,
-  this.z = 0,
-  this.cube = null,
-  init: function() {
-
-  },
-  draw: function() {
-//   actually draws shit ONLY FOR THIS ONE INSTANCE OF ANY GIVEN LINE.
-  }
-};
-
-
-
-function OurVRLine() {
-  Console.log("Initalizing the user input handler...");
-  this.init();
-  Console.log("User Input initialized!")
-}
-OurVRLine.prototype = {
-  this.x = 0,
-  this.y = 0,
-  this.z = 0,
-  this.line = null,
-  init: function() {
-
-  },
-  draw: function() {
-//   actually draws shit ONLY FOR THIS ONE INSTANCE OF ANY GIVEN LINE.
-  }
-};
