@@ -44,30 +44,42 @@ var THREADS = (function () {
 
     listCubes: function () {
       var cubeCount = this.aBunchOfCubes.length;
-      if (cubeCount == 0) {
-        console.log("No cubes found!");
-      } else {
+      if (cubeCount > 0) {
         console.log(cubeCount + " cubes found!");
         for (var i = 0; i < cubeCount; i++) {
           console.log("Cube " + i + ":");
           console.dir(this.aBunchOfCubes[i]);
         }
+      } else {
+        console.log("No cubes found!");
       }
 
     },
 
     listLines: function () {
       var lineCount = this.allObjects.length;
-      if (lineCount == 0) {
-        console.log("No lines found!");
-      } else {
+      if (lineCount > 0) {
         console.log(lineCount + " lines found!");
         for (var i = 0; i < lineCount; i++) {
           console.log("line " + i + ":");
           console.dir(this.allObjects[i]);
         }
+      } else {
+        console.log("No lines found!");
       }
 
+    },
+
+    updateAll: function() {
+      var count = this.allObjects.length;
+      if (count > 0) {
+        console.log(count + " lines found!");
+        for (var i = 0; i < lineCount; i++) {
+          this.allObjects[i].update();
+        }
+      } else {
+        console.log("No objects found!");
+      }
     }
   };
 })();
@@ -104,6 +116,9 @@ OurVRCube.prototype = {
     this.cube.rotation.y = Math.random() * 2 * Math.PI;
     this.cube.rotation.z = Math.random() * 2 * Math.PI;
   },
+  update: function() {
+    
+  },
   draw: function () {
 //   actually draws shit ONLY FOR THIS ONE INSTANCE OF ANY GIVEN LINE.
   }
@@ -129,6 +144,9 @@ OurVRLine.prototype = {
 	this.line.position.z = -20;
 	this.line.rotation.x = -50 * Math.PI / 180;
 	
+  },
+  update: function() {
+    
   },
   draw: function () {
 //   actually draws shit ONLY FOR THIS ONE INSTANCE OF ANY GIVEN LINE.
