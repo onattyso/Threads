@@ -14,7 +14,7 @@ var THREADS = (function () {
 
       console.log("Creating some cubes...");
 
-      for (var i = 0; i < 600; i++) {
+      for (var i = 0; i < 400; i++) {
         this.createCube();
       }
 
@@ -116,6 +116,7 @@ OurVRCube.prototype = {
   },
   update: function() {
     this.cube.rotation.x += 2*Math.PI/180;
+    this.cube.position.z --;
   },
   draw: function () {
 //   actually draws shit ONLY FOR THIS ONE INSTANCE OF ANY GIVEN LINE.
@@ -138,14 +139,13 @@ OurVRLine.prototype = {
 	this.material = new THREE.MeshPhongMaterial({color: 0xff0000, side: THREE.DoubleSide});
 	this.line = new THREE.Mesh(this.geometry, this.material);
 	this.line.position.x = 0;
-	this.line.position.y = 0;
+	this.line.position.y = -15;
 	this.line.position.z = -20;
 	this.line.rotation.x = -50 * Math.PI / 180;
 	
   },
   update: function() {
-  	this.line.rotation.x += 1*Math.PI/180;
-    
+  	// this.line.rotation.x += 1*Math.PI/180;    
   },
   draw: function () {
 //   actually draws shit ONLY FOR THIS ONE INSTANCE OF ANY GIVEN LINE.
