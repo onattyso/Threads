@@ -141,11 +141,12 @@ OurVRLine.prototype = {
 	this.line.position.x = 0;
 	this.line.position.y = -15;
 	this.line.position.z = -20;
-	this.line.rotation.x = -50 * Math.PI / 180;
+	this.line.rotation.x = -80 * Math.PI / 180;
 	
   },
   update: function() {
   	// this.line.rotation.x += 1*Math.PI/180;    
+  	this.line.scale.y++;
   },
   draw: function () {
 //   actually draws shit ONLY FOR THIS ONE INSTANCE OF ANY GIVEN LINE.
