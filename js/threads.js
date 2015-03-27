@@ -1,9 +1,6 @@
 //
 // thread.js
-// 2015/03/14
-//
-// I moved THREADS back up to the top because the rest of the app is not going to stay where it is for very long...
-// It'll all get moved into THREADS in some way or another down the road...
+
 var THREADS = (function () {
   return {
     aBunchOfCubes: [],
@@ -21,6 +18,8 @@ var THREADS = (function () {
       console.log("Listing all of the cubes we just made...");
       this.listCubes();
       this.createLine();
+      requestAnimationFrame(this.animate)
+
     },
     createCube: function () {
       var aCube = new OurVRCube();
@@ -83,7 +82,23 @@ var THREADS = (function () {
       } else {
         console.log("No cubes found!");
       }
-    }
+    },
+
+	animate: function() {
+
+	  // Update VR headset position and apply to camera.
+	  controls.update();
+	  THREADS.updateAll();
+
+	  // Render the scene through the VREffect, but only if it's in VR mode.
+	  if (vrmgr.isVRMode()) {
+	    effect.render(scene, camera);
+	  } else {
+	    renderer.render(scene, camera);
+	  }
+
+	  requestAnimationFrame(THREADS.animate);
+	}
   };
 })();
 
@@ -187,29 +202,6 @@ effect.setSize(window.innerWidth, window.innerHeight);
 
 // Create a VR manager helper to enter and exit VR mode.
 var vrmgr = new WebVRManager(effect);
-
-
-
-// Request animation frame loop function
-function animate() {
-
-  // Update VR headset position and apply to camera.
-  controls.update();
-
-  THREADS.updateAll();
-
-  // Render the scene through the VREffect, but only if it's in VR mode.
-  if (vrmgr.isVRMode()) {
-    effect.render(scene, camera);
-  } else {
-    renderer.render(scene, camera);
-  }
-
-  requestAnimationFrame(animate);
-}
-// Kick off animation loop
-animate();
-
 
 // Listen for keyboard event and zero positional sensor on appropriate keypress.
 function onKey(event) {
