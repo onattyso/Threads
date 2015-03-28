@@ -5,6 +5,7 @@ var THREADS = (function () {
   return {
     aBunchOfCubes: [],
     allObjects: [],
+    timer: 0,
 
     init: function () {
       console.log("Initializing Threads!");
@@ -33,7 +34,6 @@ var THREADS = (function () {
     },
     createLine: function () {
       var aLine = new OurVRLine();
-
       this.allObjects.push(aLine);
       scene.add(aLine.line);
 
@@ -49,7 +49,6 @@ var THREADS = (function () {
       } else {
         console.log("No cubes found!");
       }
-
     },
 
     listLines: function () {
@@ -84,8 +83,7 @@ var THREADS = (function () {
       }
     },
 
-	animate: function() {
-
+	animate: function(time) {
 	  // Update VR headset position and apply to camera.
 	  controls.update();
 	  THREADS.updateAll();
@@ -98,6 +96,7 @@ var THREADS = (function () {
 	  }
 
 	  requestAnimationFrame(THREADS.animate);
+	  THREADS.timer += 1;
 	}
   };
 })();
@@ -130,8 +129,11 @@ OurVRCube.prototype = {
     this.cube.rotation.z = Math.random() * 2 * Math.PI;
   },
   update: function() {
-    this.cube.rotation.x += 2*Math.PI/180;
+    // this.cube.rotation.x += 2*Math.PI/180;
     this.cube.position.z --;
+    this.cube.rotation.x = Math.abs(Math.sin(THREADS.timer*0.005)*100)
+    this.cube.rotation.y = Math.abs(Math.sin(THREADS.timer*0.005)*100)
+    this.cube.rotation.z = Math.abs(Math.sin(THREADS.timer*0.005)*100)
   },
   draw: function () {
 //   actually draws shit ONLY FOR THIS ONE INSTANCE OF ANY GIVEN LINE.
