@@ -1,17 +1,26 @@
 //
 // thread.js
 
+function toRadians (angle) {
+  return angle * (Math.PI / 180);
+}
+
+function randomBetween(start, end){
+return Math.floor(Math.random() * (end - start + 1) + start);
+}
+
 var THREADS = (function () {
   return {
     aBunchOfCubes: [],
     allObjects: [],
     timer: 0,
 
+
     init: function () {
       console.log("Initializing Threads!");
 
       console.log("Creating some cubes...");
-
+      this.rot_speed=Math.random();
       for (var i = 0; i < 400; i++) {
         this.createCube();
       }
@@ -113,6 +122,7 @@ OurVRCube.prototype = {
   geometry: 0,
   material: 0,
   cube: 0,
+  rot_speed: null,
   init: function () {
     console.log("Making a 3D cube!");
     // Build a cube here...
@@ -130,10 +140,9 @@ OurVRCube.prototype = {
   },
   update: function() {
     // this.cube.rotation.x += 2*Math.PI/180;
-    this.cube.position.z --;
-    this.cube.rotation.x = Math.abs(Math.sin(THREADS.timer*0.005)*100)
-    this.cube.rotation.y = Math.abs(Math.sin(THREADS.timer*0.005)*100)
-    this.cube.rotation.z = Math.abs(Math.sin(THREADS.timer*0.005)*100)
+    // this.cube.position.z --;
+    this.cube.position.x += Math.sin(toRadians(THREADS.timer)*this.rot_speed)/6;
+    this.cube.position.y += Math.cos(toRadians(THREADS.timer)*this.rot_speed)/6;
   },
   draw: function () {
 //   actually draws shit ONLY FOR THIS ONE INSTANCE OF ANY GIVEN LINE.
