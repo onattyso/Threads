@@ -15,17 +15,11 @@ var THREADS = (function () {
     allObjects: [],
     timer: 0,
 
-
     init: function () {
-      console.log("Initializing Threads!");
-
-      console.log("Creating some cubes...");
       this.rot_speed=Math.random();
       for (var i = 0; i < 400; i++) {
         this.createCube();
       }
-
-      console.log("Listing all of the cubes we just made...");
       this.listCubes();
       this.createLine();
       requestAnimationFrame(this.animate)
@@ -33,11 +27,8 @@ var THREADS = (function () {
     },
     createCube: function () {
       var aCube = new OurVRCube();
-
       // And then save it to the aBunchOfCubes array:
       this.aBunchOfCubes.push(aCube);
-
-      // And add it to the scene (this could be move to a later point in the app...)
       scene.add(aCube.cube);
 
     },
@@ -92,27 +83,25 @@ var THREADS = (function () {
       }
     },
 
-	animate: function(time) {
+	animate: function() {
 	  // Update VR headset position and apply to camera.
 	  controls.update();
 	  THREADS.updateAll();
-
+	  camera.position.z--;
 	  // Render the scene through the VREffect, but only if it's in VR mode.
 	  if (vrmgr.isVRMode()) {
 	    effect.render(scene, camera);
 	  } else {
 	    renderer.render(scene, camera);
 	  }
-
+  	  THREADS.timer += 1;
 	  requestAnimationFrame(THREADS.animate);
-	  THREADS.timer += 1;
 	}
   };
 })();
 
 
 function OurVRCube() {
-  console.log("Building a new Cube");
   this.init();
 }
 OurVRCube.prototype = {
@@ -124,7 +113,6 @@ OurVRCube.prototype = {
   cube: 0,
   rot_speed: null,
   init: function () {
-    console.log("Making a 3D cube!");
     // Build a cube here...
     this.geometry = new THREE.BoxGeometry(15, 15, 15);
     this.material = new THREE.MeshPhongMaterial({color: Math.random() * 0xffffff});
@@ -139,8 +127,6 @@ OurVRCube.prototype = {
     this.cube.rotation.z = Math.random() * 2 * Math.PI;
   },
   update: function() {
-    // this.cube.rotation.x += 2*Math.PI/180;
-    // this.cube.position.z --;
     this.cube.position.x += Math.sin(toRadians(THREADS.timer)*this.rot_speed)/6;
     this.cube.position.y += Math.cos(toRadians(THREADS.timer)*this.rot_speed)/6;
   },
@@ -151,7 +137,6 @@ OurVRCube.prototype = {
 
 
 function OurVRLine() {
-  console.log("Building a new line");
   this.init();
 }
 OurVRLine.prototype = {
@@ -179,6 +164,27 @@ OurVRLine.prototype = {
   }
 };
 
+// function OurVRCamera(camera) {
+//   console.log("Building a new camera");
+//   this.init();
+// }
+// OurVRCamera.prototype = {
+//   x: 0,
+//   y: 0,
+//   z: 0,
+//   line: null,
+//   init: function () {
+//   	this.camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.01, 1000);
+//   	this.camera.position.set(0, 50, 500);
+//   },
+//   update: function() {
+//   	this.camera.position.z--;
+//   },
+//   draw: function () {
+// //   actually draws shit ONLY FOR THIS ONE INSTANCE OF ANY GIVEN LINE.
+//   }
+// };
+
 
 //=====================
 // Everything after here is going to be moving somewhere else at some point...
@@ -195,7 +201,8 @@ scene.fog = new THREE.FogExp2(0x000000, 0.0016);
 
 //lights!
 var light = new THREE.DirectionalLight(0xffffff, 1);
-light.position.set(1, 1, 1).normalize();
+// light.position.set(1, 1, 1).normalize();
+light.position.set(1, 1, 1);
 scene.add(light);
 
 var amblight = new THREE.AmbientLight(0x333333);
@@ -203,6 +210,8 @@ scene.add(amblight);
 
 // Create a three.js camera
 var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
+camera.position.set(0, 0, 0);
+scene.add(camera);
 
 // Apply VR headset positional data to camera.
 var controls = new THREE.VRControls(camera);
@@ -219,7 +228,6 @@ function onKey(event) {
   if (event.keyCode == 90) { // z
     controls.zeroSensor();
   }
-
   // Key codes https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode
   if (event.keyCode == 74) { // "J"
     line.position.x = line.position.x - 1;
@@ -237,11 +245,9 @@ function onKey(event) {
 }
 window.addEventListener('keydown', onKey, true);
 
-
-// Handle window resizes
 function onWindowResize() {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
+  THREADS.camera.aspect = window.innerWidth / window.innerHeight;
+  THREADS.camera.updateProjectionMatrix();
   effect.setSize(window.innerWidth, window.innerHeight);
 }
 window.addEventListener('resize', onWindowResize, false);
