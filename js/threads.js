@@ -1,6 +1,14 @@
 //
 // thread.js
 
+function toRadians (angle) {
+  return angle * (Math.PI / 180);
+}
+
+function randomBetween(start, end){
+  return Math.floor(Math.random() * (end - start + 1) + start);
+}
+
 var THREADS = (function () {
   return {
     aBunchOfCubes: [],
@@ -12,18 +20,40 @@ var THREADS = (function () {
 
       console.log("Creating some cubes...");
 
-      for (var i = 0; i < 400; i++) {
-        this.createCube();
+      var lowX = -400;
+      var highX = 400;
+      var lowY = -400;
+      var highY = 400;
+      var lowZ = -400;
+      var highZ = 400;
+
+      var xRows = 30;
+      var yRows = 30;
+
+      for (var j=0; j < yRows; j++) {
+        for (var i = 0; i < xRows; i++) {
+          // var xVal = randomBetween(lowX, highX);
+          // var yVal = randomBetween(lowY, highY);
+          // var zVal = randomBetween(lowZ, highZ);
+
+          var xVal = i -(xRows/2); //randomBetween(lowX, highX);
+          var yVal = j -(yRows/2); //randomBetween(lowY, highY);
+          var zVal = -10; //randomBetween(lowZ, highZ);
+
+          console.log("vals: " + xVal + " " + yVal + " " + zVal);
+          this.createCube(xVal, yVal, zVal);
+        }
       }
+      
 
       console.log("Listing all of the cubes we just made...");
-      this.listCubes();
-      this.createLine();
+      // this.listCubes();
+      // this.createLine();
       requestAnimationFrame(this.animate)
 
     },
-    createCube: function () {
-      var aCube = new OurVRCube();
+    createCube: function (xVal, yVal, zVal) {
+      var aCube = new OurVRCube(xVal, yVal, zVal);
 
       // And then save it to the aBunchOfCubes array:
       this.aBunchOfCubes.push(aCube);
@@ -95,45 +125,71 @@ var THREADS = (function () {
 	    renderer.render(scene, camera);
 	  }
 
+    THREADS.timer += 1;
 	  requestAnimationFrame(THREADS.animate);
-	  THREADS.timer += 1;
 	}
   };
 })();
 
 
-function OurVRCube() {
+function OurVRCube(xVal, yVal, zVal) {
   console.log("Building a new Cube");
-  this.init();
+  this.init(xVal, yVal, zVal);
 }
 OurVRCube.prototype = {
   x: 0,
   y: 0,
   z: 0,
+  gravity: 0,
+  rot_speed: 1,
+
   geometry: 0,
   material: 0,
   cube: 0,
-  init: function () {
+  init: function (new_x, new_y, new_z) {
     console.log("Making a 3D cube!");
     // Build a cube here...
-    this.geometry = new THREE.BoxGeometry(15, 15, 15);
+    this.geometry = new THREE.BoxGeometry(1, 1, 1);
     this.material = new THREE.MeshPhongMaterial({color: Math.random() * 0xffffff});
+    // this.material = new THREE.MeshPhongMaterial({color: 0xffffff});
     this.cube = new THREE.Mesh(this.geometry, this.material);
 
-    this.cube.position.x = Math.random() * 800 - 400;
-    this.cube.position.y = Math.random() * 800 - 400;
-    this.cube.position.z = Math.random() * 800 - 400;
+    this.x = new_x;
+    this.y = new_y;
+    this.z = new_z;
+
+    this.cube.position.x = this.x;
+    this.cube.position.y = this.y;
+    this.cube.position.z = this.z;
+
+
+    this.rot_speed = randomBetween(1, 10);
+    // this.gravity = randomBetween(-10, 0);
+
+    
+
+    // this.cube.position.x = Math.random() * 800 - 400;
+    // this.cube.position.y = Math.random() * 800 - 400;
+    // this.cube.position.z = Math.random() * 800 - 400;
 
     this.cube.rotation.x = Math.random() * 2 * Math.PI;
     this.cube.rotation.y = Math.random() * 2 * Math.PI;
     this.cube.rotation.z = Math.random() * 2 * Math.PI;
   },
   update: function() {
-    // this.cube.rotation.x += 2*Math.PI/180;
-    this.cube.position.z --;
-    this.cube.rotation.x = Math.abs(Math.sin(THREADS.timer*0.005)*100)
-    this.cube.rotation.y = Math.abs(Math.sin(THREADS.timer*0.005)*100)
-    this.cube.rotation.z = Math.abs(Math.sin(THREADS.timer*0.005)*100)
+
+    this.cube.rotation.x += toRadians(this.rot_speed)/10;
+
+    // this.cube.position.z --;
+    // this.cube.position.x += Math.sin(toRadians(THREADS.timer)*this.rot_speed)/10;
+    // this.cube.position.y += Math.cos(toRadians(THREADS.timer)*this.rot_speed)/10;
+
+    this.cube.position.y += this.gravity * THREADS.timer;
+
+    // if (this.cube.position.y < 0) {
+    //   this.cube.position.y = 0;
+    // }
+
   },
   draw: function () {
 //   actually draws shit ONLY FOR THIS ONE INSTANCE OF ANY GIVEN LINE.
