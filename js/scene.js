@@ -50,15 +50,16 @@ var SCENE = (function () {
     },
 
     // Wrap some of the more commonly used THREE methods so we can just call SCENE.add():
-    add: function(object) {
-      this.scene.add(object);
-    },
+    //add: function(object) {
+    //  this.scene.add(object);
+    //},
 
     // Add an update method so we can treat the whole scene upkeep as
-    update: function() {
+    update: function () {
       this.controls.update();
     },
-    draw: function() {
+
+    draw: function () {
       // Render the scene through the VREffect, but only if it's in VR mode.
       if (this.vrmgr.isVRMode()) {
         this.effect.render(this.scene, this.camera);
