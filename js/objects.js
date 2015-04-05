@@ -174,8 +174,6 @@ Cube.prototype = {
     // Then apply the quaternion instead of the Object3D's rotation parameters:
     this.cube.rotation.setFromQuaternion(quaternion);
 
-  },
-  draw: function () {
   }
 };
 
@@ -183,18 +181,46 @@ Cube.prototype = {
 // ToDo: Make the following objects follow the common object format so they will
 //  initialize correctly in our scene.
 
-function objectStrange() {
+function objectStrange(scene, objectsArray) {
+  console.log("Starting objectStrange!")
   // Create 3d objects
-  var geometry = new THREE.PlaneBufferGeometry(-20, -10, 10, 10);
-  var material = new THREE.MeshBasicMaterial({color: 0xff0000, side: THREE.DoubleSide});
-  var line = new THREE.Mesh(geometry, material);
-  line.position.x = 0;
-  line.position.y = 0;
-  line.position.z = -20;
-  line.rotation.x = -50 * Math.PI / 180;
+  this.geometry = new THREE.PlaneBufferGeometry(-20, -10, 10, 10);
+  this.material = new THREE.MeshBasicMaterial({color: 0xff0000, side: THREE.DoubleSide});
+  this.line = new THREE.Mesh(this.geometry, this.material);
 
-// Add mesh to your three.js scene
-  SCENE.add(line);
+  this.pos = new THREE.Vector3(0, 0, -20); // x, y, z
+  this.line.position.set(this.pos.x, this.pos.y, this.pos.z);
+
+  // We'll use quaternions for the rotation of the object:
+  var quaternion = new THREE.Quaternion();
+  quaternion.setFromAxisAngle(new THREE.Vector3(0, 0, 1), Math.random() * Math.PI / 180);
+  this.line.rotation.setFromQuaternion(quaternion);
+
+  // position and rotation end
+  //===============
+
+  // Add this WHOLE object to the main Objects array (THREADS.allObjects):
+  objectsArray.push(this);
+
+  scene.add(this.line);
+}
+
+objectStrange.prototype = {
+  pos: 0,
+  line: 0,
+  angle: 0,
+
+  update: function () {
+    this.angle += 1;
+
+    var quaternion = new THREE.Quaternion();
+    quaternion.setFromAxisAngle(new THREE.Vector3(0, 0, 1), this.angle * Math.PI / 180);
+
+    // Then apply the quaternion instead of the Object3D's rotation parameters:
+    this.line.rotation.setFromQuaternion(quaternion);
+
+  }
+
 }
 
 function objectText() {
