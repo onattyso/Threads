@@ -9,20 +9,31 @@ var THREADS = (function () {
     init: function () {
       console.log("Initializing Threads!");
 
-      console.log("Creating some cubes...");
-
       for (var i = 0; i < 400; i++) {
         this.createCube();
       }
 
-      //console.log("Listing all of the cubes we just made...");
-      //this.listCubes();
-      this.createLine();
-      objectText();
+      //this.createLine();
+
+
+      //objectText();
       //objectLineTest();
-      //objectPositionTest();
-      FUCKTHIS();
+      //randomCurve();
+
+
+      //this.createJamesCube();
+
       requestAnimationFrame(this.animate)
+
+    },
+    createJamesCube: function () {
+      var jamesCube = new Cube();
+
+      // And then save it to the aBunchOfCubes array:
+      this.allObjects.push(jamesCube);
+
+      // And add it to the scene (this could be move to a later point in the app...)
+      SCENE.add(jamesCube.cube);
 
     },
     createCube: function () {
