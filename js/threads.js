@@ -9,6 +9,11 @@ function randomBetween(start, end){
 return Math.floor(Math.random() * (end - start + 1) + start);
 }
 
+//Do this later. Maybe through shaders.
+// function randomColor(){
+// 	'#'+Math.floor(Math.random()*16777215).toString(16);
+// }
+
 var THREADS = (function () {
   return {
     aBunchOfCubes: [],
@@ -43,8 +48,8 @@ var THREADS = (function () {
       var cubeCount = this.aBunchOfCubes.length;
       if (cubeCount > 0) {
         for (var i = 0; i < cubeCount; i++) {
-          console.log("Cube " + i + ":");
-          console.dir(this.aBunchOfCubes[i]);
+          // console.log("Cube " + i + ":");
+          // console.dir(this.aBunchOfCubes[i]);
         }
       } else {
         console.log("No cubes found!");
@@ -95,6 +100,7 @@ var THREADS = (function () {
 	    renderer.render(scene, camera);
 	  }
   	  THREADS.timer += 1;
+  	  fuckthisshit();
 	  requestAnimationFrame(THREADS.animate);
 	}
   };
@@ -136,6 +142,38 @@ OurVRCube.prototype = {
 };
 
 
+// function OurVRLine() {
+//   this.init();
+// }
+// OurVRLine.prototype = {
+//   x: 0,
+//   y: 0,
+//   z: 0,
+//   line: null,
+//   init: function () {
+
+//   	var path = [];
+
+// 	this.geometry = new THREE.PlaneBufferGeometry(-20, -10, 10, 10);
+// 	this.material = new THREE.MeshPhongMaterial({color: 0xff0000, side: THREE.DoubleSide});
+// 	this.line = new THREE.Mesh(this.geometry, this.material);
+// 	this.line.position.x = 0;
+// 	this.line.position.y = -15;
+// 	this.line.position.z = -20;
+// 	this.line.rotation.x = -90 * Math.PI / 180;
+	
+//   },
+//   update: function() {
+//   	// this.line.rotation.x += 1*Math.PI/180;    
+//   	this.line.scale.y++;
+//   },
+//   draw: function () {
+// //   actually draws shit ONLY FOR THIS ONE INSTANCE OF ANY GIVEN LINE.
+//   }
+// };
+
+//ATTEMPTING TO USE SPLINECURVE3 TO DYNAMICALLY GROW LINE
+
 function OurVRLine() {
   this.init();
 }
@@ -146,13 +184,20 @@ OurVRLine.prototype = {
   line: null,
   init: function () {
 
-	this.geometry = new THREE.PlaneBufferGeometry(-20, -10, 10, 10);
+  	var points= [];
+  	for (var i=0; i<10 ; i++) {
+  		points.push(new THREE.Vector3(randomBetween(), randomBetween(), randomBetween()));
+  	}
+
+  	var spline = new THREE.SplineCurve3(points);
+
+	this.geometry = new THREE.PlaneBufferGeometry(THREE.SplineCurve3(points), 10, 10);
 	this.material = new THREE.MeshPhongMaterial({color: 0xff0000, side: THREE.DoubleSide});
 	this.line = new THREE.Mesh(this.geometry, this.material);
 	this.line.position.x = 0;
 	this.line.position.y = -15;
 	this.line.position.z = -20;
-	this.line.rotation.x = -80 * Math.PI / 180;
+	this.line.rotation.x = -90 * Math.PI / 180;
 	
   },
   update: function() {
@@ -172,7 +217,6 @@ OurVRLine.prototype = {
 //   x: 0,
 //   y: 0,
 //   z: 0,
-//   line: null,
 //   init: function () {
 //   	this.camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.01, 1000);
 //   	this.camera.position.set(0, 50, 500);
@@ -246,8 +290,8 @@ function onKey(event) {
 window.addEventListener('keydown', onKey, true);
 
 function onWindowResize() {
-  THREADS.camera.aspect = window.innerWidth / window.innerHeight;
-  THREADS.camera.updateProjectionMatrix();
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
   effect.setSize(window.innerWidth, window.innerHeight);
 }
 window.addEventListener('resize', onWindowResize, false);
@@ -256,6 +300,24 @@ window.addEventListener('resize', onWindowResize, false);
 // Everything above here is going to be moved somewhere else where it can be better managed...
 //=====================
 
+var points;
+
+function fuckthisshit() {
+	points= [];
+  	for (var i=0; i<10 ; i++) {
+  		points.push(new THREE.Vector3(randomBetween(-50, 50), randomBetween(-50, 50), randomBetween(-500,10)));
+  	}
+
+  	var curve = new THREE.SplineCurve3(points);
+  	var geometry = new THREE.Geometry();
+  	geometry.vertices = curve.getPoints(50);
+
+  	var material = new THREE.LineBasicMaterial({color: Math.random() * 0xffffff});
+
+  	var splineObject = new THREE.Line(geometry, material);
+  	scene.add(splineObject)
+
+}
 
 
 //=====================
