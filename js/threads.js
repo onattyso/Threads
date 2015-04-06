@@ -22,6 +22,7 @@ var THREADS = (function () {
       new OurVRLine(SCENE.scene, this.allObjects);
       new Cube(SCENE.scene, this.allObjects);
       new objectStrange(SCENE.scene, this.allObjects);
+      new objectText(SCENE.scene, this.allObjects);
 
       //objectText();
       //objectLineTest();

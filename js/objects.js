@@ -1,5 +1,5 @@
 // Copy this whole block to start playing with new "objects":
-function SomeVRObject(scene, objectsArray) {
+function OurVRCube(scene, objectsArray) {
   // This is the basic template for 3D objects.
   this.geometry = new THREE.BoxGeometry(15, 15, 15);
   this.material = new THREE.MeshPhongMaterial({color: Math.random() * 0xffffff});
@@ -223,16 +223,17 @@ objectStrange.prototype = {
 
 }
 
-function objectText() {
-  var textParams = {
+function objectText(scene, objectsArray) {
+  console.log("starting objectText")
+  // Create 3d objects
+  var font = 'helvetica';
+  var textMesh = new THREE.TextGeometry("Jam is a Nemo\/", {
+    font: 'helvetiker',
     size: 1,
-    height: 1,
-    font: 'helvetiker'
-  };
-
-  var textMesh = new THREE.TextGeometry("Console..........:!@#42350\/", textParams);
+    height: 1
+  });
 // var textMaterial = new THREE.MeshBasicMaterial({color: 0xFF5555});
-  var textMaterial = new THREE.MeshNormalMaterial();
+  var textMaterial = new THREE.MeshNormalMaterial({color: 0xFF5555});
   var textObj = new THREE.Mesh(textMesh, textMaterial);
 
   textObj.position.z = -20;
@@ -243,9 +244,61 @@ function objectText() {
   textObj.position.y = 10;
   textObj.rotation.x = 30 * Math.PI / 180;
 
-// Add text to the scene
-//  SCENE.add(textObj);
+  // We'll use quaternions for the rotation of the object:
+  // var quaternion = new THREE.Quaternion();
+  // quaternion.setFromAxisAngle(new THREE.Vector3(0, 0, 1), Math.random() * Math.PI / 180);
+  // this.textObj.rotation.setFromQuaternion(quaternion);
+
+  // position and rotation end
+  //===============
+
+  // Add this WHOLE object to the main Objects array (THREADS.allObjects):
+  objectsArray.push(this);
+
+  scene.add(this.textObj);
 }
+
+objectText.prototype = {
+  size: 1,
+  height: 1,
+  font: 'helvetiker',
+  angle: 0,
+
+  update: function () {
+    this.angle += 1;
+
+    var quaternion = new THREE.Quaternion();
+    quaternion.setFromAxisAngle(new THREE.Vector3(0, 0, 1), this.angle * Math.PI / 180);
+    // Then apply the quaternion instead of the Object3D's rotation parameters:
+    // this.textObj.rotation.setFromQuaternion(quaternion);
+
+  }
+
+}
+
+// function objectText() {
+//   var textParams = {
+//     size: 1,
+//     height: 1,
+//     font: 'helvetiker'
+//   };
+
+//   var textMesh = new THREE.TextGeometry("Console..........:!@#42350\/", textParams);
+// // var textMaterial = new THREE.MeshBasicMaterial({color: 0xFF5555});
+//   var textMaterial = new THREE.MeshNormalMaterial();
+//   var textObj = new THREE.Mesh(textMesh, textMaterial);
+
+//   textObj.position.z = -20;
+//   textMesh.computeBoundingBox();
+//   console.log("Size max x: " + textMesh.boundingBox.max.x);
+//   console.log("Size min x: " + textMesh.boundingBox.min.x);
+//   textObj.position.x = -textMesh.boundingBox.max.x / 2;
+//   textObj.position.y = 10;
+//   textObj.rotation.x = 30 * Math.PI / 180;
+
+// // Add text to the scene
+// //  SCENE.add(textObj);
+// }
 
 function objectTriangleTest() {
   var tri_geo = new THREE.Geometry();
