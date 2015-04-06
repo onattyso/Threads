@@ -226,23 +226,23 @@ objectStrange.prototype = {
 function objectText(scene, objectsArray) {
   console.log("starting objectText")
   // Create 3d objects
-  var font = 'helvetica';
-  var textMesh = new THREE.TextGeometry("Jam is a Nemo\/", {
+  this.font = 'helvetiker';
+  this.textMesh = new THREE.TextGeometry("Jam is a Nemo\/", {
     font: 'helvetiker',
     size: 1,
     height: 1
   });
 // var textMaterial = new THREE.MeshBasicMaterial({color: 0xFF5555});
-  var textMaterial = new THREE.MeshNormalMaterial({color: 0xFF5555});
-  var textObj = new THREE.Mesh(textMesh, textMaterial);
+  this.textMaterial = new THREE.MeshNormalMaterial({color: 0xFF5555});
+  this.textObj = new THREE.Mesh(textMesh, textMaterial);
 
-  textObj.position.z = -20;
-  textMesh.computeBoundingBox();
+  this.textObj.position.z = -20;
+  this.textMesh.computeBoundingBox();
   console.log("Size max x: " + textMesh.boundingBox.max.x);
   console.log("Size min x: " + textMesh.boundingBox.min.x);
-  textObj.position.x = -textMesh.boundingBox.max.x / 2;
-  textObj.position.y = 10;
-  textObj.rotation.x = 30 * Math.PI / 180;
+  this.textObj.position.x = -textMesh.boundingBox.max.x / 2;
+  this.textObj.position.y = 10;
+  this.textObj.rotation.x = 30 * Math.PI / 180;
 
   // We'll use quaternions for the rotation of the object:
   // var quaternion = new THREE.Quaternion();
