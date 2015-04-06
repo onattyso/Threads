@@ -221,10 +221,10 @@ objectStrange.prototype = {
 
   }
 
-}
+};
 
 function objectText(scene, objectsArray) {
-  console.log("starting objectText")
+  console.log("starting objectText");
   // Create 3d objects
   this.font = 'helvetiker';
   this.textMesh = new THREE.TextGeometry("Jam is a Nemo\/", {
@@ -234,13 +234,13 @@ function objectText(scene, objectsArray) {
   });
 // var textMaterial = new THREE.MeshBasicMaterial({color: 0xFF5555});
   this.textMaterial = new THREE.MeshNormalMaterial({color: 0xFF5555});
-  this.textObj = new THREE.Mesh(textMesh, textMaterial);
+  this.textObj = new THREE.Mesh(this.textMesh, this.textMaterial);
 
   this.textObj.position.z = -20;
   this.textMesh.computeBoundingBox();
-  console.log("Size max x: " + textMesh.boundingBox.max.x);
-  console.log("Size min x: " + textMesh.boundingBox.min.x);
-  this.textObj.position.x = -textMesh.boundingBox.max.x / 2;
+  console.log("Size max x: " + this.textMesh.boundingBox.max.x);
+  console.log("Size min x: " + this.textMesh.boundingBox.min.x);
+  this.textObj.position.x = -this.textMesh.boundingBox.max.x / 2;
   this.textObj.position.y = 10;
   this.textObj.rotation.x = 30 * Math.PI / 180;
 
@@ -274,7 +274,7 @@ objectText.prototype = {
 
   }
 
-}
+};
 
 // function objectText() {
 //   var textParams = {
