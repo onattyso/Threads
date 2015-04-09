@@ -18,6 +18,7 @@ var THREADS = (function () {
   return {
     aBunchOfCubes: [],
     allObjects: [],
+    forward_speed: -10,
     timer: 0,
 
     init: function () {
@@ -27,6 +28,7 @@ var THREADS = (function () {
       }
       this.listCubes();
       this.createLine();
+      this.createNewLine();
       requestAnimationFrame(this.animate)
 
     },
@@ -41,7 +43,12 @@ var THREADS = (function () {
       var aLine = new OurVRLine();
       this.allObjects.push(aLine);
       scene.add(aLine.line);
+    },
 
+    createNewLine: function () {
+    	var SplineLine = new NewLine();
+    	this.allObjects.push(SplineLine);
+    	scene.add(SplineLine.splineObject);
     },
 
     listCubes: function () {
@@ -100,7 +107,6 @@ var THREADS = (function () {
 	    renderer.render(scene, camera);
 	  }
   	  THREADS.timer += 1;
-  	  fuckthisshit();
 	  requestAnimationFrame(THREADS.animate);
 	}
   };
@@ -133,11 +139,8 @@ OurVRCube.prototype = {
     this.cube.rotation.z = Math.random() * 2 * Math.PI;
   },
   update: function() {
-    this.cube.position.x += Math.sin(toRadians(THREADS.timer)*this.rot_speed)/6;
-    this.cube.position.y += Math.cos(toRadians(THREADS.timer)*this.rot_speed)/6;
-  },
-  draw: function () {
-//   actually draws shit ONLY FOR THIS ONE INSTANCE OF ANY GIVEN LINE.
+    this.cube.rotation.x += Math.sin(toRadians(THREADS.timer)*this.rot_speed)/60;
+    this.cube.rotation.y += Math.cos(toRadians(THREADS.timer)*this.rot_speed)/60;
   }
 };
 
@@ -167,9 +170,6 @@ OurVRCube.prototype = {
 //   	// this.line.rotation.x += 1*Math.PI/180;    
 //   	this.line.scale.y++;
 //   },
-//   draw: function () {
-// //   actually draws shit ONLY FOR THIS ONE INSTANCE OF ANY GIVEN LINE.
-//   }
 // };
 
 //ATTEMPTING TO USE SPLINECURVE3 TO DYNAMICALLY GROW LINE
@@ -188,6 +188,7 @@ OurVRLine.prototype = {
   	for (var i=0; i<10 ; i++) {
   		points.push(new THREE.Vector3(randomBetween(), randomBetween(), randomBetween()));
   	}
+  	// console.log(points);
 
   	var spline = new THREE.SplineCurve3(points);
 
@@ -203,11 +204,45 @@ OurVRLine.prototype = {
   update: function() {
   	// this.line.rotation.x += 1*Math.PI/180;    
   	this.line.scale.y++;
-  },
-  draw: function () {
-//   actually draws shit ONLY FOR THIS ONE INSTANCE OF ANY GIVEN LINE.
   }
 };
+
+//This should replace the OurVRLine above to map a line/tube along SplineCurve3 points
+//get Z to always increase as x and y randomly change, then make the camera move with it.
+
+// var points;
+
+function NewLine() {
+	this.init();
+}
+
+NewLine.prototype = {
+	splineObject: 0,
+	points: [],
+	curve: 0,
+	geometry: 0,
+	material: 0,
+	init: function () {
+		// var forwards = -200 + THREADS.forward_speed;
+	  	for (var i=0; i<50 ; i++) {
+			// this.points.push(new THREE.Vector3(randomBetween(-10, 10), randomBetween(-10, 10), randomBetween(-300, -10)));
+			this.points.push(new THREE.Vector3(randomBetween(-10, 10), randomBetween(-50, 0), -i*70));
+		}
+
+	  	this.curve = new THREE.SplineCurve3(this.points);
+	  	this.geometry = new THREE.TubeGeometry(this.curve, this.points.length, 1, 30);
+	  	// this.geometry.vertices = this.curve.getPoints(50);
+
+	  	this.material = new THREE.MeshNormalMaterial({color: Math.random() * 0xffffff, side: THREE.DoubleSide});
+	  	// THREE.FrontSide, THREE.BackSide and THREE.DoubleSide
+	  	this.splineObject = new THREE.Mesh(this.geometry, this.material);
+	},
+	update: function() {
+
+	}
+};
+
+
 
 // function OurVRCamera(camera) {
 //   console.log("Building a new camera");
@@ -299,25 +334,6 @@ window.addEventListener('resize', onWindowResize, false);
 
 // Everything above here is going to be moved somewhere else where it can be better managed...
 //=====================
-
-var points;
-
-function fuckthisshit() {
-	points= [];
-  	for (var i=0; i<10 ; i++) {
-  		points.push(new THREE.Vector3(randomBetween(-50, 50), randomBetween(-50, 50), randomBetween(-500,10)));
-  	}
-
-  	var curve = new THREE.SplineCurve3(points);
-  	var geometry = new THREE.Geometry();
-  	geometry.vertices = curve.getPoints(50);
-
-  	var material = new THREE.LineBasicMaterial({color: Math.random() * 0xffffff});
-
-  	var splineObject = new THREE.Line(geometry, material);
-  	scene.add(splineObject)
-
-}
 
 
 //=====================
