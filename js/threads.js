@@ -230,12 +230,13 @@ NewLine.prototype = {
 		}
 
 	  	this.curve = new THREE.SplineCurve3(this.points);
-	  	this.geometry = new THREE.TubeGeometry(this.curve, this.points.length, 1, 30);
-	  	// this.geometry.vertices = this.curve.getPoints(50);
+	  	this.geometry = new THREE.TubeGeometry(this.curve, this.points.length*20, 1, 30);
+	  	// this.geometry.vertices = this.curve.getPoints(10);
 
 	  	this.material = new THREE.MeshNormalMaterial({color: Math.random() * 0xffffff, side: THREE.DoubleSide});
 	  	// THREE.FrontSide, THREE.BackSide and THREE.DoubleSide
 	  	this.splineObject = new THREE.Mesh(this.geometry, this.material);
+
 	},
 	update: function() {
 
