@@ -26,22 +26,19 @@ function OurVRCube(scene, objectsArray) {
   scene.add(this.cube);
 }
 OurVRCube.prototype = {
-  // We aren't going to use x, y, and z for object positions....
-  //x: 0,
-  //y: 0,
-  //z: 0,
-  // We're going to use a Vector3:
+  // We're going to use a Vector3 for object position:
   pos: 0,  // THREE.Vector3
 
-  // Texture storage:
+  // Object and texture storage
   geometry: 0,
   material: 0,
-
   cube: 0, // The actual THREE.Object3D itself
+
+  // Object shape and animation parameters:
   angle: 0,
 
   update: function () {
-    this.cube.rotation.x += 0.1 * Math.PI / 180;
+    //this.cube.rotation.x += 0.1 * Math.PI / 180;
   },
   draw: function () {
     // probably don't need this...
@@ -58,17 +55,17 @@ function OurVRCube(scene, objectsArray) {
 
   // Build a cube here...
   this.geometry = new THREE.BoxGeometry(15, 15, 15);
-  //this.material = new THREE.MeshPhongMaterial({color: Math.random() * 0xffffff});
-  this.material = new THREE.MeshPhongMaterial({color: Math.random() * 0xff << 4});
+  this.material = new THREE.MeshPhongMaterial({color: Math.random() * 0xffffff});
+  //this.material = new THREE.MeshPhongMaterial({color: Math.random() * 0xff << 4});
   this.cube = new THREE.Mesh(this.geometry, this.material);
-  //
-  //this.cube.position.x = Math.random() * 800 - 400;
-  //this.cube.position.y = Math.random() * 800 - 400;
-  //this.cube.position.z = Math.random() * 800 - 400;
 
-  this.cube.position.x = 0;
-  this.cube.position.y = -30;
-  this.cube.position.z = 0;
+  this.cube.position.x = Math.random() * 800 - 400;
+  this.cube.position.y = Math.random() * 800 - 400;
+  this.cube.position.z = Math.random() * 800 - 400;
+
+  //this.cube.position.x = 0;
+  //this.cube.position.y = -30;
+  //this.cube.position.z = 0;
 
   this.cube.rotation.x = Math.random() * 1 * Math.PI;
   this.cube.rotation.y = Math.random() * 1 * Math.PI;
@@ -204,7 +201,6 @@ function objectStrange(scene, objectsArray) {
 
   scene.add(this.line);
 }
-
 objectStrange.prototype = {
   pos: 0,
   line: 0,
@@ -257,7 +253,6 @@ function objectText(scene, objectsArray) {
 
   scene.add(this.textObj);
 }
-
 objectText.prototype = {
   size: 1,
   height: 1,
@@ -351,19 +346,153 @@ function objectLineTest() {
   SCENE.add(splineObject);
 }
 
-function randomCurve() {
-  var aVec3 = new THREE.Vector3(1, 2, 3);
+//function randomCurve(scene, objectsArray) {
+//  var points = [];
+//  for (var i = 0; i < 10; i++) {
+//    points.push(new THREE.Vector3(randomBetween(-10, 10), randomBetween(-10, 10), randomBetween(-20, -200)));
+//  }
+//
+//  var curve = new THREE.SplineCurve3(points);
+//  var geometry = new THREE.Geometry();
+//  geometry.vertices = curve.getPoints(50);
+//  var material = new THREE.LineBasicMaterial({color: 0xff0000});
+//  var splineObject = new THREE.Line(geometry, material);
+//  //SCENE.add(splineObject);
+//
+//}
 
-  var points = [];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function randomCurve(scene, objectsArray) {
+  // This is the basic template for 3D objects.
+  //this.geometry = new THREE.BoxGeometry(15, 15, 15);
+  //this.material = new THREE.MeshPhongMaterial({color: Math.random() * 0xffffff});
+  //this.curve = new THREE.Mesh(this.geometry, this.material);
+  this.points = [];
   for (var i = 0; i < 10; i++) {
-    points.push(new THREE.Vector3(randomBetween(-10, 10), randomBetween(-10, 10), randomBetween(-20, -200)));
+    this.points.push(new THREE.Vector3(randomBetween(-10, 10), randomBetween(-10, 10), randomBetween(-20, -200)));
   }
 
-  var curve = new THREE.SplineCurve3(points);
-  var geometry = new THREE.Geometry();
-  geometry.vertices = curve.getPoints(50);
-  var material = new THREE.LineBasicMaterial({color: 0xff0000});
-  var splineObject = new THREE.Line(geometry, material);
-  SCENE.add(splineObject);
+  this.curve = new THREE.SplineCurve3(this.points);
+  this.geometry = new THREE.Geometry();
+  this.geometry.vertices = this.curve.getPoints(50);
+  this.material = new THREE.LineBasicMaterial({color: 0xff0000});
+  this.splineObject = new THREE.Line(this.geometry, this.material);
 
+
+  //===============
+  // Set position and rotation of the object:
+
+  // We'll use a Vector3 for the position of the object:
+  this.pos = new THREE.Vector3(0, 0, -20); // x, y, z
+  this.splineObject.position.set(this.pos.x, this.pos.y, this.pos.z);
+
+  // We'll use quaternions for the rotation of the object:
+  var quaternion = new THREE.Quaternion();
+  quaternion.setFromAxisAngle(new THREE.Vector3(0, 0, 1), Math.random() * Math.PI / 180);
+  this.splineObject.rotation.setFromQuaternion(quaternion);
+
+  // position and rotation end
+  //===============
+
+  // Add this WHOLE object to the main Objects array (THREADS.allObjects):
+  objectsArray.push(this);
+  // Then add this object's mesh to the scene
+  scene.add(this.splineObject);
 }
+randomCurve.prototype = {
+  // We're going to use a Vector3 for object positions:
+  pos: 0,  // THREE.Vector3
+
+  // object storage:
+  points: [],
+  geometry: 0,
+  material: 0,
+
+  splineObject: 0, // The actual THREE.Object3D itself
+  angle: 0,
+
+  update: function () {
+    //this.splineObject.rotation.x += 1. * Math.PI / 180;
+  }
+};
+
+
+
+
+
+
+
+
+
+function NewLine(scene, objectsArray) {
+
+  // var forwards = -200 + THREADS.forward_speed;
+  for (var i=0; i<100 ; i++) {
+    // this.points.push(new THREE.Vector3(randomBetween(-10, 10), randomBetween(-10, 10), randomBetween(-300, -10)));
+    this.points.push(new THREE.Vector3(randomBetween(-20, 20), randomBetween(-20, 20), -i*100));
+  }
+
+  this.curve = new THREE.SplineCurve3(this.points);
+  this.geometry = new THREE.TubeGeometry(this.curve, this.points.length*10, 1, 80);
+  // this.geometry.vertices = this.curve.getPoints(50);
+
+  this.material = new THREE.MeshNormalMaterial({color: Math.random() * 0xffffff, side: THREE.DoubleSide});
+  // THREE.FrontSide, THREE.BackSide and THREE.DoubleSide
+  this.splineObject = new THREE.Mesh(this.geometry, this.material);
+
+
+
+  //===============
+  // Set position and rotation of the object:
+
+  //// We'll use a Vector3 for the position of the object:
+  //this.pos = new THREE.Vector3(0, 0, -20); // x, y, z
+  //this.cube.position.set(this.pos.x, this.pos.y, this.pos.z);
+  //
+  //// We'll use quaternions for the rotation of the object:
+  //var quaternion = new THREE.Quaternion();
+  //quaternion.setFromAxisAngle(new THREE.Vector3(0, 0, 1), Math.random() * Math.PI / 180);
+  //this.cube.rotation.setFromQuaternion(quaternion);
+
+  // position and rotation end
+  //===============
+
+  // Add this WHOLE object to the main Objects array (THREADS.allObjects):
+  objectsArray.push(this);
+  // Then add this object's mesh to the scene
+  scene.add(this.splineObject);
+}
+NewLine.prototype = {
+  pos: 0,  // THREE.Vector3
+
+  // Object and texture storage:
+  geometry: 0,
+  material: 0,
+  splineObject: 0, // The actual THREE.Object3D itself
+
+  points: [],
+  angle: 0,
+
+  update: function () {
+    //this.splineObject.geometry.points.push(new THREE.Vector3(randomBetween(-10, 10), randomBetween(-50, 0), randomBetween(0, -100)));
+  },
+  draw: function () {
+    // probably don't need this...
+  }
+};

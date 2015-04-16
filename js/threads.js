@@ -15,18 +15,22 @@ var THREADS = (function () {
     },
 
     createObjects: function () {
-      for (var i = 0; i < 400; i++) {
+      for (var i = 0; i < 500; i++) {
         new OurVRCube(SCENE.scene, this.allObjects);
       }
-
-      new OurVRLine(SCENE.scene, this.allObjects);
-      new Cube(SCENE.scene, this.allObjects);
-      new objectStrange(SCENE.scene, this.allObjects);
+      //
+      //new OurVRCube(SCENE.scene, this.allObjects);
+      //new Cube(SCENE.scene, this.allObjects);
+      //new objectStrange(SCENE.scene, this.allObjects);
       new objectText(SCENE.scene, this.allObjects);
+
+      //new randomCurve(SCENE.scene, this.allObjects);
+      new NewLine(SCENE.scene, this.allObjects);
+
 
       //objectText();
       //objectLineTest();
-      //randomCurve();
+
 
 
     },
@@ -72,7 +76,10 @@ var THREADS = (function () {
       // Update VR headset position and apply to camera.
       SCENE.update();
       THREADS.updateAll();
-      //camera.position.z += -1;
+      SCENE.camera.position.z += -3;
+      if (SCENE.camera.position.z<=-(100*100)) {
+        SCENE.camera.position.z = 0;
+      }
 
       SCENE.draw();
 
