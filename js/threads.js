@@ -20,6 +20,9 @@ var THREADS = (function () {
     allObjects: [],
     forward_speed: -10,
     timer: 0,
+    cur_z: 0,
+
+    SplineLine: 0,
 
     init: function () {
       this.rot_speed=Math.random();
@@ -46,9 +49,9 @@ var THREADS = (function () {
     },
 
     createNewLine: function () {
-    	var SplineLine = new NewLine();
-    	this.allObjects.push(SplineLine);
-    	scene.add(SplineLine.splineObject);
+    	THREADS.SplineLine = new NewLine();
+    	//this.allObjects.push(THREADS.SplineLine);
+    	scene.add(THREADS.SplineLine.splineObject);
     },
 
     listCubes: function () {
@@ -83,7 +86,7 @@ var THREADS = (function () {
           this.allObjects[i].update();
         }
       } else {
-        console.log("No objects found!");
+        //console.log("No objects found!");
       }
       var cubecount = this.aBunchOfCubes.length;
       if (cubecount > 0) {
@@ -91,15 +94,41 @@ var THREADS = (function () {
           this.aBunchOfCubes[i].update();
         }
       } else {
-        console.log("No cubes found!");
+        //console.log("No cubes found!");
       }
+
+
+      this.SplineLine.update();
+
     },
 
-	animate: function() {
+	animate: function(time) {
 	  // Update VR headset position and apply to camera.
 	  controls.update();
 	  THREADS.updateAll();
-	  camera.position.z--;
+
+
+	  //camera.position.z--;
+
+    THREADS.cur_z += 1;
+
+    //if (THREADS.cur_z >= 50) {
+    //  THREADS.cur_z = 0;
+    //}
+
+    console.log("deal with it: " + THREADS.cur_z);
+    var cur_x = THREADS.SplineLine.curve.getPointAt(THREADS.cur_z/3500).x;
+    var cur_y = THREADS.SplineLine.curve.getPointAt(THREADS.cur_z/3500).y;
+
+    var look_at_pos_x = THREADS.SplineLine.curve.getPointAt(THREADS.cur_z/3500).x;
+    var look_at_pos_y = THREADS.SplineLine.curve.getPointAt(THREADS.cur_z/3500).y;
+
+    console.log("x: " + cur_x + " y: " + cur_y);
+
+    camera.position.set(cur_x, cur_y, camera.position.z-1);
+
+    camera.lookAt(look_at_pos_x, look_at_pos_y, 0.0);
+
 	  // Render the scene through the VREffect, but only if it's in VR mode.
 	  if (vrmgr.isVRMode()) {
 	    effect.render(scene, camera);
@@ -164,7 +193,7 @@ OurVRCube.prototype = {
 // 	this.line.position.y = -15;
 // 	this.line.position.z = -20;
 // 	this.line.rotation.x = -90 * Math.PI / 180;
-	
+
 //   },
 //   update: function() {
 //   	// this.line.rotation.x += 1*Math.PI/180;    
@@ -199,10 +228,10 @@ OurVRLine.prototype = {
 	this.line.position.y = -15;
 	this.line.position.z = -20;
 	this.line.rotation.x = -90 * Math.PI / 180;
-	
+
   },
   update: function() {
-  	// this.line.rotation.x += 1*Math.PI/180;    
+  	// this.line.rotation.x += 1*Math.PI/180;
   	this.line.scale.y++;
   }
 };
@@ -230,7 +259,9 @@ NewLine.prototype = {
 		}
 
 	  	this.curve = new THREE.SplineCurve3(this.points);
+	  	//this.curve = new THREE.ClosedSplineCurve3(this.points);
 	  	this.geometry = new THREE.TubeGeometry(this.curve, this.points.length*20, 1, 30);
+	  	//this.geometry = new THREE.TubeGeometry(this.curve, this.points.length, 1, 30);
 	  	// this.geometry.vertices = this.curve.getPoints(10);
 
 	  	this.material = new THREE.MeshNormalMaterial({color: Math.random() * 0xffffff, side: THREE.DoubleSide});
@@ -240,7 +271,10 @@ NewLine.prototype = {
 	},
 	update: function() {
 
-	}
+	},
+  getCurrentPoint: function() {
+
+  }
 };
 
 
