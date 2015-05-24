@@ -449,7 +449,7 @@ function NewLine(scene, objectsArray) {
   }
 
   this.curve = new THREE.SplineCurve3(this.points);
-  this.geometry = new THREE.TubeGeometry(this.curve, this.points.length*10, 1, 80);
+  this.geometry = new THREE.TubeGeometry(this.curve, this.points.length*10, 40, 40);
   // this.geometry.vertices = this.curve.getPoints(50);
 
   this.material = new THREE.MeshNormalMaterial({color: Math.random() * 0xffffff, side: THREE.DoubleSide});

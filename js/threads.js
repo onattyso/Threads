@@ -16,15 +16,16 @@ var THREADS = (function () {
 
     createObjects: function () {
       for (var i = 0; i < 500; i++) {
-        new OurVRCube(SCENE.scene, this.allObjects);
+        //new OurVRCube(SCENE.scene, this.allObjects);
       }
       //
       //new OurVRCube(SCENE.scene, this.allObjects);
       //new Cube(SCENE.scene, this.allObjects);
       //new objectStrange(SCENE.scene, this.allObjects);
-      new objectText(SCENE.scene, this.allObjects);
+      //new objectText(SCENE.scene, this.allObjects);
 
       //new randomCurve(SCENE.scene, this.allObjects);
+      new NewLine(SCENE.scene, this.allObjects);
       new NewLine(SCENE.scene, this.allObjects);
 
 
